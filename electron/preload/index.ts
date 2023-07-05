@@ -97,3 +97,7 @@ contextBridge.exposeInMainWorld('darkMode', {
   toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
   system: () => ipcRenderer.invoke('dark-mode:system'),
 });
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  handleCounter: (callback) => ipcRenderer.on('update-counter', callback),
+});

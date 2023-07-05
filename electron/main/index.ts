@@ -1,6 +1,15 @@
 import { release } from 'node:os';
 import { join } from 'node:path';
-import { BrowserWindow, app, ipcMain, nativeTheme, shell } from 'electron';
+import {
+  BrowserWindow,
+  Menu,
+  MenuItem,
+  app,
+  globalShortcut,
+  ipcMain,
+  nativeTheme,
+  shell,
+} from 'electron';
 
 // The built directory structure
 //
@@ -40,7 +49,7 @@ const preload = join(__dirname, '../preload/index.js');
 const url = process.env.VITE_DEV_SERVER_URL;
 const indexHtml = join(process.env.DIST, 'index.html');
 
-async function createWindow() {
+function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
     icon: join(process.env.PUBLIC, 'favicon.svg'),
@@ -73,11 +82,42 @@ async function createWindow() {
     if (url.startsWith('https:')) shell.openExternal(url);
     return { action: 'deny' };
   });
+
+  const menu = new Menu();
+  menu.append(
+    new MenuItem({
+      label: 'Electron',
+      submenu: [
+        {
+          role: 'help',
+          accelerator:
+            process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Alt+Shift+I',
+          click: () => {
+            console.log('Electron rocks!');
+          },
+        },
+        {
+          click: () => win.webContents.send('update-counter', 1),
+          label: 'Increment',
+        },
+        {
+          click: () => win.webContents.send('update-counter', -1),
+          label: 'Decrement',
+        },
+      ],
+    })
+  );
+
+  Menu.setApplicationMenu(menu);
+  return win;
   // win.webContents.on('will-navigate', (event, url) => { }) #344
 }
 
 app.enableSandbox();
 app.whenReady().then(() => {
+  globalShortcut.register('Alt+CommandOrControl+I', () => {
+    console.log('Electron loves global shortcuts!');
+  });
   createWindow();
 
   app.on('window-all-closed', () => {
@@ -102,6 +142,10 @@ app.whenReady().then(() => {
     } else {
       createWindow();
     }
+  });
+
+  ipcMain.on('counter-value', (_event, value) => {
+    console.log(value); // will print value to Node console
   });
 
   // New window example arg: new windows url

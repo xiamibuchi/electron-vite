@@ -23,7 +23,9 @@
   },
   "build": {
     "appId": "com.shenyang.app",
+    "productName": "electron-vite",
     "copyright": "Copyright © 2023 ShenYang",
+    "compression": "normal",
     "asar": true,
     "directories": {
       "output": "release/${version}"
@@ -34,9 +36,10 @@
     ],
     "mac": {
       "artifactName": "${productName}_${version}.${ext}",
-      "target": [
-        "dmg"
-      ]
+      "target": {
+        "arch": "universal",
+        "target": "dmg"
+      }
     },
     "win": {
       "target": [
