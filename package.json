@@ -39,7 +39,8 @@
       "target": {
         "arch": "universal",
         "target": "dmg"
-      }
+      },
+      "icon": "dist/icon.icns"
     },
     "win": {
       "target": [
@@ -50,6 +51,7 @@
           ]
         }
       ],
+      "icon": "dist/icon.png",
       "artifactName": "${productName}_${version}.${ext}"
     },
     "nsis": {
