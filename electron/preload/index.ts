@@ -100,4 +100,5 @@ contextBridge.exposeInMainWorld('darkMode', {
 
 contextBridge.exposeInMainWorld('electronAPI', {
   handleCounter: (callback) => ipcRenderer.on('update-counter', callback),
+  sendMessage: (message: string) => ipcRenderer.invoke('send-message', message),
 });

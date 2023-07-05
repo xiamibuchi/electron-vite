@@ -24,6 +24,11 @@ window.electronAPI.handleCounter((event, value) => {
   console.log(value);
   event.sender.send('counter-value', value + 1);
 });
+// @ts-ignore
+window.electronAPI.sendMessage({
+  title: 'notification',
+  body: 'this is a notification',
+});
 
 onMounted(() => {
   window.postMessage('removeLoading', '*');

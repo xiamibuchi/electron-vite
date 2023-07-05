@@ -4,6 +4,7 @@ import {
   BrowserWindow,
   Menu,
   MenuItem,
+  Notification,
   app,
   globalShortcut,
   ipcMain,
@@ -148,6 +149,12 @@ app.whenReady().then(() => {
     console.log(value); // will print value to Node console
   });
 
+  // const notification = new Notification({
+  //   title: 'Notification',
+  //   body: 'Hello from Electron',
+  // });
+  // notification.show();
+
   // New window example arg: new windows url
   ipcMain.handle('open-win', (_, arg) => {
     const childWindow = new BrowserWindow({
@@ -176,5 +183,15 @@ app.whenReady().then(() => {
 
   ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system';
+  });
+
+  ipcMain.handle('send-message', (_, { title, body }) => {
+    title = title || 'Notification';
+    body = body || '';
+    const notification = new Notification({
+      title,
+      body,
+    });
+    notification.show();
   });
 });
